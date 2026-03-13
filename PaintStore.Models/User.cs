@@ -8,7 +8,6 @@ public class User
     public string Name { get; set; }
     public string Email { get; set; }
 
-
     //User --- Order 1:N
     public List<Order> Orders { get; set; }
 }

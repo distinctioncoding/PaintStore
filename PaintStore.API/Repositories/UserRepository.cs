@@ -1,17 +1,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using PaintStore.API.DataAccess;
+using PaintStore.API.Interfaces;
 using PaintStore.Models;
 
 namespace PaintStore.API.Repositories;
 
-public class UserRepository
+public class UserRepository:IUserRepository
 {
     private PaintStoreDbContext _dbContext;
 
-    public UserRepository()
+    public UserRepository(PaintStoreDbContext paintStoreDb)
     {
-
+        _dbContext = paintStoreDb;
     }
     public User AddUserToDb(User user)
     {

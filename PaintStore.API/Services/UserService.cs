@@ -1,24 +1,24 @@
 using System;
+using PaintStore.API.Interfaces;
 using PaintStore.API.Repositories;
 using PaintStore.Models;
 
 namespace PaintStore.API.Services;
 
-public class UserService
+public class UserService : IUserService
 {
-    private UserRepository _userRepository;
+    private IUserRepository _userRepository;
+    private IConfiguration _configuration;
 
-    public UserService()
+    public UserService(IUserRepository userRepository, IConfiguration configuration)
     {
-        _userRepository = new UserRepository();
+        _userRepository = userRepository;
+        _configuration = configuration;
     }
 
     public User CreateUser(User user)
-    {
-        if(string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Name))
-        {
-            throw new ArgumentException("Email and Name can not be null or empty");
-        }
+    {      
+        var key =  _configuration.GetSection("ApiKeys:OpenAI");
 
         User newUser = _userRepository.AddUserToDb(user);
         return newUser;

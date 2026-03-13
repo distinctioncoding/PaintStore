@@ -1,8 +1,12 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PaintStore.API.DataAccess;
+using PaintStore.API.Interfaces;
 using PaintStore.API.Services;
 using PaintStore.Models;
+using PaintStore.Models.DTOs;
+using Serilog;
 
 namespace PaintStore.API.Controllers
 {
@@ -10,18 +14,38 @@ namespace PaintStore.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private UserService _userService;
-        public UserController()
+        private IUserService _userService;
+        private IMapper _mapper;
+        private ILogger<UserController> _logger;
+        public UserController(IUserService userService, ILogger<UserController> logger, IMapper mapper)
         {
-            _userService = new UserService();
+            _userService = userService;
+            _logger = logger;
+            _mapper = mapper;
         }
 
+        /// <summary>
+        /// Creates new User resource
+        /// </summary>
+        /// <param name="">User model data</param>
+        /// <returns code="201">Returns new User if success</return>
+        /// <returns code="500">Throw 500 if unknown exception</return>
         [HttpPost]
-        public ActionResult CreateUser([FromBody] User user)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<UserResponseDto> CreateUser([FromBody] UserCreateDto userCreateDto)
         {          
+            _logger.LogInformation("Create User: Received request");
+            
+            User user = _mapper.Map<User>(userCreateDto);
+
             User newUser = _userService.CreateUser(user);
 
-            return Created("GetUserById",newUser);
+            UserResponseDto dto = _mapper.Map<UserResponseDto>(newUser);
+
+            _logger.LogInformation($"Create User: User created with id {newUser.Id}");
+            return Created("GetUserById",dto);
         }
     }
 }
