@@ -1,11 +1,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PaintStore.API.DataAccess;
-using PaintStore.API.Interfaces;
-using PaintStore.API.Services;
 using PaintStore.Models;
 using PaintStore.Models.DTOs;
+using PaintStore.Models.Interfaces.Services;
 using Serilog;
 
 namespace PaintStore.API.Controllers

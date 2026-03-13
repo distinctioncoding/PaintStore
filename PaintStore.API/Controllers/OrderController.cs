@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PaintStore.API.DataAccess;
+using PaintStore.DataAccess;
 using PaintStore.Models;
 using PaintStore.Models.DTOs;
 

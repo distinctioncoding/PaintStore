@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PaintStore.API.DataAccess;
+using PaintStore.DataAccess;
 using PaintStore.Models;
 
 namespace PaintStore.API.Controllers

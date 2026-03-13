@@ -1,12 +1,13 @@
 using System.Text.Json.Serialization;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using PaintStore.API.DataAccess;
-using PaintStore.API.Interfaces;
 using PaintStore.API.Mapping;
-using PaintStore.API.Repositories;
-using PaintStore.API.Services;
+using PaintStore.DataAccess;
 using PaintStore.Models.DTOs;
+using PaintStore.Models.Interfaces.Repositories;
+using PaintStore.Models.Interfaces.Services;
+using PaintStore.Repositories.Users;
+using PaintStore.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
