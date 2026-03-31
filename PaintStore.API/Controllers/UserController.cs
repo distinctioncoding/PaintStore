@@ -1,7 +1,10 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PaintStore.API.DataAccess;
 using PaintStore.Models;
+using PaintStore.Models.DTOs;
+using PaintStore.Models.Interfaces.Services;
+using Serilog;
 
 namespace PaintStore.API.Controllers
 {
@@ -9,22 +12,38 @@ namespace PaintStore.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private PaintStoreDbContext _dbContext;
-        public UserController(PaintStoreDbContext paintStoreDb)
+        private IUserService _userService;
+        private IMapper _mapper;
+        private ILogger<UserController> _logger;
+        public UserController(IUserService userService, ILogger<UserController> logger, IMapper mapper)
         {
-            _dbContext = paintStoreDb;
+            _userService = userService;
+            _logger = logger;
+            _mapper = mapper;
         }
 
+        /// <summary>
+        /// Creates new User resource
+        /// </summary>
+        /// <param name="">User model data</param>
+        /// <returns code="201">Returns new User if success</return>
+        /// <returns code="500">Throw 500 if unknown exception</return>
         [HttpPost]
-        public ActionResult CreateUser([FromBody] User user)
-        {
-            //Add only mark user to be added
-            _dbContext.Users.Add(user);
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UserResponseDto>> CreateUser([FromBody] UserCreateDto userCreateDto)
+        {          
+            _logger.LogInformation("Create User: Received request");
+            
+            User user = _mapper.Map<User>(userCreateDto);
 
-            //save to db
-            _dbContext.SaveChanges();
+            User newUser = await _userService.CreateUserAsync(user);
 
-            return Created("GetUserById",user);
+            UserResponseDto dto = _mapper.Map<UserResponseDto>(newUser);
+
+            _logger.LogInformation($"Create User: User created with id {newUser.Id}");
+            return Created("GetUserById",dto);
         }
     }
 }
