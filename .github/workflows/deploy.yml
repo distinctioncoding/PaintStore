@@ -25,6 +25,9 @@ jobs:
 
       - name: Build project
         run: dotnet build --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test PaintStore.Tests/PaintStore.Tests.csproj --configuration Release --no-build
         
       - name: Publish
         run: dotnet publish -c Release -o ${{ env.PUBLISH_DIR }}
