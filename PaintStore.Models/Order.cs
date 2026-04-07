@@ -17,7 +17,7 @@ public class Order
     public DateTime CreatedAt { get; set; }
 
     //Total Price should be a auto commputed value from PaintProducts
-    public decimal TotalPrice { get => PaintProducts.Sum(p=>p.Price);}
+    public decimal TotalPrice { get => PaintProducts.Sum(p=>p.Price - 1);}
     
     public Order()
     {
